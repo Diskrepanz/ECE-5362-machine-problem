@@ -74,7 +74,7 @@
 
 *** DEC Autoincrement or Autodecrement execution cycle ***
  st=70  rt='[R] -> t1'      	rac=3 it1
- st=71  rt='[t1] - 1 -> q'      	oa comp oadder newv newc
+ st=71  rt='[t1] - 1 -> q'      oa comp oadder newv newc
  st=72  rt='[q] -> R'		oq wac=3 newz newn
 	cond='ir64' value=3 nst=60
 
