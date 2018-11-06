@@ -9,7 +9,7 @@
  st=1   rt='[[mar]] -> mdr'		read
  st=2   rt='[mdr] -> ir'		omdr iir
  st=3   rt='[pc]+1 -> q'		rac=1 rn=3 ib p1 oadder	
- st=4   rt='[q] -> pc'			oq wac=1 wn=3     
+ st=5   rt='[q] -> pc'			oq wac=1 wn=3     
 	cond='ir158' value=0 nst=10	
 
 	cond='ir64' value=1 nst=20		
