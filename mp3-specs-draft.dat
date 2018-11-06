@@ -2,6 +2,7 @@
 ***   ECE 5362, Au 2018   ***
 ***   Machine Problem 1   ***
 *******  Sheng Ding  ********
+*******  Allen Yang  ********
 *****************************
 ***   Start fetch cycle   ***
  st=0   rt='[pc] -> mar'		imar rac=1 rn=3
