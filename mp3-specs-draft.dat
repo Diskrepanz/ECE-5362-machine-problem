@@ -69,7 +69,7 @@
  st=63  rt='[t1] - 1 -> q'	oa comp oadder newv newc
  st=64  rt='[q] -> mdr'		oq imdr newz newn
  st=65  rt='[mdr] -> memory'	write
-	cond='ir64' value=2 nst=70
+	cond='ir64' value=2 nst=90
 	nst=0
 
 *** DEC Autoincrement or Autodecrement execution cycle ***
