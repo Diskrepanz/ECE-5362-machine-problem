@@ -1,4 +1,4 @@
-*** Double operand ***
+*** Double operand ADD&SUB***
  st=60   rt='[pc]+1 -> q'		rac=1 rn=3 ib p1 oadder	
  st=61   rt='[q] -> pc'			oq wac=1 wn=3    
  	cond='ir118' value=0 nst=70										*** reg ***
@@ -12,108 +12,110 @@
 *** Register ***
  st=70  rt='[R] -> t2'      	rac=2 it2
  	cond='ir74' value=0 nst=71  									*** reg ***
- 	cond='ir74' value=1 nst=78  									*** reg ind ***
-	cond='ir74' value=2 nst=78  									*** autoin ***
-	cond='ir74' value=3 nst=75  									*** autode ***
-	cond='ir74' value=4 nst=88  									*** index  ***
-	cond='ir74' value=5 nst=88										*** absl ***
+ 	cond='ir74' value=1 nst=79  									*** reg ind ***
+	cond='ir74' value=2 nst=79  									*** autoin ***
+	cond='ir74' value=3 nst=76  									*** autode ***
+	cond='ir74' value=4 nst=90  									*** index  ***
+	cond='ir74' value=5 nst=90										*** absl ***
 
-*** put src to t1, dst to ib,effective way is to put dst to t1, src to ib***
+*** put src to t1, dst to ib,effective way is to put dst to t1, src to ib ***
  st=71  rt='[R] -> t1'			rac=3 t1					
- st=72  rt='[t2] -> ib'			ot2 ib	                
- st=73  rt='[t1] + [ib] -> q'	oa ib oadder
- st=74  rt='[q] -> [R]'			oq wac=3
+ st=72  rt='[t2] -> ib'			ot2 ib
+ 	cond='ir1512' value=2 nst=74									*** SUB ***	                
+ st=73  rt='[t1] + [ib] -> q'	oa ib oadder newv newc
+ 	nst=75
+ st=74  rt='[t1] - [ib] -> q'	oa ib comp p1 oadder newv newc
+ st=75  rt='[q] -> [R]'			oq wac=3 newz newn
  	nst=0
- st=75  rt='[R] -> t1'      	rac=3 it1
- st=76  rt='[t1] - 1 -> q'		oa comp oadder newv newc
- st=77  rt='[q] -> R'			oq wac=3 newz newn
- st=78  rt='[R] -> mar'      	rac=3 imar
- st=79  rt='[[mar]] -> mdr'		read
 
- st=80  rt='[mdr] -> t1'		mdr it1
- st=81  rt='[t2] -> ib'			ot2 ib
- st=82  rt='[t1] + [ib] -> q'	oa ib oadder
- st=83  rt='[ib] -> mar'		ot1 imar
- st=84  rt='[q] -> mdr'			oq imdr newz newn
- st=85  rt='[mdr] -> memory'	write
- 	cond='ir74' value=2 nst=86  									*** autoin ***
+ st=76  rt='[R] -> t1'      	rac=3 it1
+ st=77  rt='[t1] - 1 -> q'		oa comp oadder
+ st=78  rt='[q] -> R'			oq wac=3 
+ st=79  rt='[R] -> mar'      	rac=3 imar
+ st=80  rt='[[mar]] -> mdr'		read
+ st=81  rt='[mdr] -> t1'		mdr it1
+ st=82  rt='[t2] -> ib'			ot2 ib
+ 	cond='ir1512' value=2 nst=84									*** SUB ***
+ st=83  rt='[t1] + [ib] -> q'	oa ib oadder newv newc
+ 	nst=85
+ st=84  rt='[t1] - [ib] -> q'	oa ib comp p1 oadder newv newc
+ st=85  rt='[ib] -> mar'		ot1 imar
+ st=86  rt='[q] -> mdr'			oq imdr newz newn
+ st=87  rt='[mdr] -> memory'	write
+ 	cond='ir74' value=2 nst=88  									*** autoin ***
  	nst=0   
- st=86  rt='[R]+1 -> q'         rac=3 ib p1 oadder newv newc
- st=87  rt='[q] -> R'           oq wac=3 newz newn
+ st=88  rt='[R]+1 -> q'         rac=3 ib p1 oadder newv newc
+ st=89  rt='[q] -> R'           oq wac=3 newz newn
     nst=0 
- st=88  rt='[q] -> mar'      	imar oq
- st=89  rt='[[mar]] -> mdr'		read
- st=90  rt='[mdr] -> t1'      	omdr it1
- st=91  rt='[pc] + 1 -> q'		rac=1 rn=3 ib p1 oadder
- st=92  rt='[q] -> pc'			oq wac=1 wn=3  
- 	cond='ir74' value=5 nst=95   									*** absl ***
- 	nst=93
- st=93  rt='[R] + [t1] -> q'	rac=3 oa ib oadder newz newn
- st=94  rt='[q] -> t1'	        oq it1
- st=95  rt='[t1] -> mar'		ot1 imar
- 	nst=79
+
+ st=90  rt='[q] -> mar'      	imar oq
+ st=91  rt='[[mar]] -> mdr'		read
+ st=92  rt='[mdr] -> t1'      	omdr it1
+ st=93  rt='[pc] + 1 -> q'		rac=1 rn=3 ib p1 oadder
+ st=94  rt='[q] -> pc'			oq wac=1 wn=3  
+ 	cond='ir74' value=5 nst=97   									*** absl ***
+ 	nst=95
+ st=95  rt='[R] + [t1] -> q'	rac=3 oa ib oadder newz newn
+ st=96  rt='[q] -> t1'	        oq it1
+ st=97  rt='[t1] -> mar'		ot1 imar
+ 	nst=80
 
 *** Register indirect ***
- st=78  rt='[R] -> mar'      	rac=2 imar
- st=79  rt='[[mar]] -> mdr'		read
- st=80  rt='[mdr] -> t2'		mdr it2
+ st=100  rt='[R] -> mar'      	rac=2 imar
+ st=101  rt='[[mar]] -> mdr'	read
+ st=102  rt='[mdr] -> t2'		mdr it2
 	cond='ir74' value=0 nst=71  									*** reg ***
- 	cond='ir74' value=1 nst=78  									*** reg ind ***
-	cond='ir74' value=2 nst=78  									*** autoin ***
-	cond='ir74' value=3 nst=75  									*** autode ***
-	cond='ir74' value=4 nst=88  									*** index ***
-	cond='ir74' value=5 nst=88										*** absl ***
+ 	cond='ir74' value=1 nst=79  									*** reg ind ***
+	cond='ir74' value=2 nst=79  									*** autoin ***
+	cond='ir74' value=3 nst=76  									*** autode ***
+	cond='ir74' value=4 nst=90  									*** index ***
+	cond='ir74' value=5 nst=90										*** absl ***
 
 *** Autoincrement ***
- st=78  rt='[R] -> mar'      	rac=3 imar
- st=79  rt='[[mar]] -> mdr'		read
- st=80  rt='[mdr] -> t2'		mdr it2
- st=86  rt='[R]+1 -> q'         rac=3 ib p1 oadder newv newc
- st=87  rt='[q] -> R'           oq wac=3 newz newn
+ st=110  rt='[R] -> mar'      	rac=3 imar
+ st=111  rt='[[mar]] -> mdr'	read
+ st=112  rt='[mdr] -> t2'		mdr it2
+ st=113  rt='[R]+1 -> q'		rac=3 ib p1 oadder newv newc
+ st=114  rt='[q] -> R'			oq wac=3 newz newn
 	cond='ir74' value=0 nst=71  									*** reg ***
- 	cond='ir74' value=1 nst=78  									*** reg ind ***
-	cond='ir74' value=2 nst=78  									*** autoin ***
-	cond='ir74' value=3 nst=75  									*** autode ***
-	cond='ir74' value=4 nst=88  									*** index ***
-	cond='ir74' value=5 nst=88										*** absl ***
+ 	cond='ir74' value=1 nst=79  									*** reg ind ***
+	cond='ir74' value=2 nst=79  									*** autoin ***
+	cond='ir74' value=3 nst=76  									*** autode ***
+	cond='ir74' value=4 nst=90  									*** index ***
+	cond='ir74' value=5 nst=90										*** absl ***
 
 *** Autodecrement ***
- st=75  rt='[R] -> t1'      	rac=3 it1
- st=76  rt='[t1] - 1 -> q'		oa comp oadder newv newc
- st=77  rt='[q] -> R'			oq wac=3 newz newn
- st=78  rt='[R] -> mar'      	rac=3 imar
- st=79  rt='[[mar]] -> mdr'		read
- st=80  rt='[mdr] -> t2'		mdr it2
-	cond='ir74' value=0 nst=71  									*** reg***
- 	cond='ir74' value=1 nst=78  									*** reg ind ***
-	cond='ir74' value=2 nst=78  									*** autoin ***
-	cond='ir74' value=3 nst=75  									*** autode ***
-	cond='ir74' value=4 nst=88  									*** index ***
-	cond='ir74' value=5 nst=88										*** absl ***
+ st=120  rt='[R] -> t1'      	rac=3 it1
+ st=121  rt='[t1] - 1 -> q'		oa comp oadder newv newc
+ st=122  rt='[q] -> R'			oq wac=3 newz newn
+ st=123  rt='[R] -> mar'      	rac=3 imar
+ st=124  rt='[[mar]] -> mdr'	read
+ st=125  rt='[mdr] -> t2'		mdr it2
+	cond='ir74' value=0 nst=71  									*** reg ***
+ 	cond='ir74' value=1 nst=79  									*** reg ind ***
+	cond='ir74' value=2 nst=79  									*** autoin ***
+	cond='ir74' value=3 nst=76  									*** autode ***
+	cond='ir74' value=4 nst=90  									*** index ***
+	cond='ir74' value=5 nst=90										*** absl ***
 
 *** Index & Absolute ***
- st=88  rt='[q] -> mar'      	imar oq
- st=89  rt='[[mar]] -> mdr'		read
- st=90  rt='[mdr] -> t1'      	omdr it1
- st=91  rt='[pc] + 1 -> q'		rac=1 rn=3 ib p1 oadder
- st=92  rt='[q] -> pc'			oq wac=1 wn=3  
- 	cond='ir74' value=5 nst=95
- 	nst=93
- st=93  rt='[R] + [t1] -> q'	rac=3 oa ib oadder newz newn
- st=94  rt='[q] -> t1'	        oq it1
- st=95  rt='[t1] -> mar'		ot1 imar
-	nst=79
+ st=130  rt='[q] -> mar'      	imar oq
+ st=131  rt='[[mar]] -> mdr'	read
+ st=132  rt='[mdr] -> t1'      	omdr it1
+ st=133  rt='[pc] + 1 -> q'		rac=1 rn=3 ib p1 oadder
+ st=134  rt='[q] -> pc'			oq wac=1 wn=3  
+ 	cond='ir74' value=5 nst=137
+ 	nst=135
+ st=135  rt='[R] + [t1] -> q'	rac=3 oa ib oadder newz newn
+ st=136  rt='[q] -> t1'	        oq it1
+ st=137  rt='[t1] -> mar'		ot1 imar
+	nst=101
 
 *** Immediate ***
-st=96  rt='[q] -> t2'      	 	oq it2
+ st=140  rt='[q] -> t2'      	 oq it2
 	cond='ir74' value=0 nst=71  									*** reg ***
- 	cond='ir74' value=1 nst=78  									*** reg ind ***
-	cond='ir74' value=2 nst=78  									*** autoin ***
-	cond='ir74' value=3 nst=75  									*** autode ***
-	cond='ir74' value=4 nst=88  									*** index ***
-	cond='ir74' value=5 nst=88										*** absl ***
-
-
-
-
-
+ 	cond='ir74' value=1 nst=79  									*** reg ind ***
+	cond='ir74' value=2 nst=79  									*** autoin ***
+	cond='ir74' value=3 nst=76  									*** autode ***
+	cond='ir74' value=4 nst=90  									*** index ***
+	cond='ir74' value=5 nst=90										*** absl ***
