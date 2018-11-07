@@ -1,6 +1,6 @@
 *****************************
 ***   ECE 5362, Au 2018   ***
-***   Machine Problem 1   ***
+***   Machine Problem 3   ***
 *******  Sheng Ding  ********
 *******  Allen Yang  ********
 *****************************
@@ -8,91 +8,75 @@
  st=0   rt='[pc] -> mar'		imar rac=1 rn=3
  st=1   rt='[[mar]] -> mdr'		read
  st=2   rt='[mdr] -> ir'		omdr iir
+ 	cond='ir1512' value=1 nst=60                                ****ADD****
+ 	cond='ir1512' value=2 nst=?									****SUB****
+ 	cond='ir1512' value=3 nst=?									****MOV****	
+ 	cond='ir1512' value=0 nst=3 								****SINGLE OPERAND****
  st=3   rt='[pc]+1 -> q'		rac=1 rn=3 ib p1 oadder	
  st=4   rt='[q] -> pc'			oq wac=1 wn=3     
-	cond='ir158' value=0 nst=10	
-
-	cond='ir64' value=1 nst=20		
-	cond='ir64' value=2 nst=20		
-	cond='ir64' value=3 nst=30	
-	cond='ir65' value=2 nst=40		
-	cond='ir1512' value=0 nst=50
-
-	cond='ir64' value=1 nst=60		
-	cond='ir64' value=2 nst=60		
-	cond='ir64' value=3 nst=70	
-	cond='ir65' value=2 nst=80		
-	cond='ir1512' value=0 nst=90
+	cond='ir158' value=0 nst=10									****HALT****
+	cond='ir64' value=1 nst=20									****Register indirect****	
+	cond='ir64' value=2 nst=20									****Autoincrement****
+	cond='ir64' value=3 nst=30									****Autodecrement****
+	cond='ir65' value=2 nst=40	
+	cond='ir158' value=2 nst=50     							****Register INC****
+	cond='ir158' value=3 nst=52     							****Register DEC****
+	cond='ir118' value=4 nst=60									****NEG**** 
 	nst=10
 
 *** If any instructions are present except HALT or INC, a halt will occur.  ***
 *** HALT execution cycle ***
  st=10  halt
 
-*** INC Register indirect execution cycle ***
+*** INC&DEC Register indirect execution cycle ***
  st=20  rt='[R] -> mar'      	rac=3 imar
- st=21  rt='[[mar]] -> mdr'	read
- st=22  rt='[mdr] -> t1'	omdr it1
- st=23  rt='[t1] + 1 -> q'	oa p1 oadder newv newc
- st=24  rt='[q] -> mdr'		oq imdr newz newn
- st=25  rt='[mdr] -> memory'	write
+ st=21  rt='[[mar]] -> mdr'		read
+ st=22  rt='[mdr] -> t1'		mdr it1
+ 	cond='ir118' value=2 nst=23 								****INC****
+ 	cond='ir118' value=3 nst=24									****DEC****
+ st=23  rt='[t1] + 1 -> q'		oa p1 oadder newv newc
+ 	nst=25
+ st=24  rt='[t1] - 1 -> q'		oa comp oadder newv newc
+ st=25  rt='[q] -> mdr'			oq imdr newz newn
+ st=26  rt='[mdr] -> memory'	write
 	cond='ir64' value=2 nst=50
 	nst=0
 
-*** INC Autoincrement or Autodecrement execution cycle ***
+*** INC&DEC Autoincrement or Autodecrement execution cycle ***
  st=30  rt='[R] -> t1'      	rac=3 it1
- st=31  rt='[t1] - 1 -> q'      	oa comp oadder newv newc
- st=32  rt='[q] -> R'		oq wac=3 newz newn
+ st=31  rt='[t1] - 1 -> q'		oa comp oadder newv newc
+ st=32  rt='[q] -> R'			oq wac=3 newz newn
 	cond='ir64' value=3 nst=20
 
-*** INC Index or Absolute execution cycle *** 
+*** INC&DEC Index or Absolute execution cycle *** 
  st=40  rt='[q] -> mar'      	imar oq
- st=41  rt='[[mar]] -> mdr'	read
+ st=41  rt='[[mar]] -> mdr'		read
  st=42  rt='[mdr] -> t1'      	omdr it1
- st=43  rt='[pc] + 1 -> q'	rac=1 rn=3 ib p1 oadder
- st=44  rt='[q] -> pc'		oq wac=1 wn=3   
+ st=43  rt='[pc] + 1 -> q'		rac=1 rn=3 ib p1 oadder
+ st=44  rt='[q] -> pc'			oq wac=1 wn=3   
 	cond='ir64' value=5 nst=47
  st=45  rt='[R] + [t1] -> q'	rac=3 oa ib oadder newz newn
  st=46  rt='[q] -> t1'	        oq it1
- st=47  rt='[t1] -> mar'	ot1 imar
+ st=47  rt='[t1] -> mar'		ot1 imar
 	nst=21
 
-*** INC AC X SP PF execution cycle ***
+*** INC&DEC AC X SP PF execution cycle ***
  st=50  rt='[R]+1 -> q'         rac=3 ib p1 oadder newv newc
  st=51  rt='[q] -> R'           oq wac=3 newz newn
-        nst=0
+    nst=0
+ st=52  rt='[R] -> t1'      	rac=3 it1
+ st=53  rt='[t1] - 1 -> q'      oa comp oadder newv newc
+ st=54  rt='[q] -> R'           oq wac=3 newz newn
+ 	nst=0
 
 
-*** DEC Register indirect execution cycle ***
- st=60  rt='[R] -> mar'      	rac=3 imar
- st=61  rt='[[mar]] -> mdr'	read
- st=62  rt='[mdr] -> t1'	omdr it1
- st=63  rt='[t1] - 1 -> q'	oa comp oadder newv newc
- st=64  rt='[q] -> mdr'		oq imdr newz newn
- st=65  rt='[mdr] -> memory'	write
-	cond='ir64' value=2 nst=90
-	nst=0
 
-*** DEC Autoincrement or Autodecrement execution cycle ***
- st=70  rt='[R] -> t1'      	rac=3 it1
- st=71  rt='[t1] - 1 -> q'      oa comp oadder newv newc
- st=72  rt='[q] -> R'		oq wac=3 newz newn
-	cond='ir64' value=3 nst=60
 
-*** DEC Index or Absolute execution cycle *** 
- st=80  rt='[q] -> mar'      	imar oq
- st=81  rt='[[mar]] -> mdr'	read
- st=82  rt='[mdr] -> t1'      	omdr it1
- st=83  rt='[pc] + 1 -> q'	rac=1 rn=3 ib p1 oadder
- st=84  rt='[q] -> pc'		oq wac=1 wn=3   
-	cond='ir64' value=5 nst=87
- st=85  rt='[R] + [t1] -> q'	rac=3 oa ib oadder newz newn
- st=86  rt='[q] -> t1'	        oq it1
- st=87  rt='[t1] -> mar'	ot1 imar
-	nst=61	
 
-*** DEC AC X SP PF execution cycle ***
- st=90  rt='[R] -> t1'      	rac=3 it1
- st=91  rt='[t1] - 1 -> q'      oa comp oadder newv newc
- st=92  rt='[q] -> R'           oq wac=3 newz newn
-        nst=0
+
+
+
+
+
+
+
