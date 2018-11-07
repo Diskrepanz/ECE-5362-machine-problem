@@ -8,20 +8,20 @@
  st=0   rt='[pc] -> mar'		imar rac=1 rn=3
  st=1   rt='[[mar]] -> mdr'		read
  st=2   rt='[mdr] -> ir'		omdr iir
- 	cond='ir1512' value=1 nst=60                                ****ADD****
- 	cond='ir1512' value=2 nst=?									****SUB****
- 	cond='ir1512' value=3 nst=?									****MOV****	
- 	cond='ir1512' value=0 nst=3 								****SINGLE OPERAND****
+ 	cond='ir1512' value=1 nst=60                                *** ADD ***
+ 	cond='ir1512' value=2 nst=60								*** SUB ***
+ 	cond='ir1512' value=3 nst=150								*** MOV ***	
+ 	cond='ir1512' value=0 nst=3 								*** SINGLE OPERAND ***
  st=3   rt='[pc]+1 -> q'		rac=1 rn=3 ib p1 oadder	
  st=4   rt='[q] -> pc'			oq wac=1 wn=3     
-	cond='ir158' value=0 nst=10									****HALT****
-	cond='ir64' value=1 nst=20									****Register indirect****	
-	cond='ir64' value=2 nst=20									****Autoincrement****
-	cond='ir64' value=3 nst=30									****Autodecrement****
-	cond='ir65' value=2 nst=40	
-	cond='ir158' value=2 nst=50     							****Register INC****
-	cond='ir158' value=3 nst=52     							****Register DEC****
-	cond='ir118' value=4 nst=60									****NEG**** 
+	cond='ir158' value=0 nst=10									*** HALT ***
+	cond='ir64' value=1 nst=20									*** Register indirect ***	
+	cond='ir64' value=2 nst=20									*** Autoincrement ***
+	cond='ir64' value=3 nst=30									*** Autodecrement ***
+	cond='ir65' value=2 nst=40									*** Index & Absolute ***
+	cond='ir158' value=2 nst=50     							*** Register INC ***
+	cond='ir158' value=3 nst=52     							*** Register DEC ***
+	cond='ir118' value=4 nst=60									*** NEG *** 
 	nst=10
 
 *** If any instructions are present except HALT or INC, a halt will occur.  ***
@@ -55,6 +55,7 @@
  st=43  rt='[pc] + 1 -> q'		rac=1 rn=3 ib p1 oadder
  st=44  rt='[q] -> pc'			oq wac=1 wn=3   
 	cond='ir64' value=5 nst=47
+	nst=45
  st=45  rt='[R] + [t1] -> q'	rac=3 oa ib oadder newz newn
  st=46  rt='[q] -> t1'	        oq it1
  st=47  rt='[t1] -> mar'		ot1 imar

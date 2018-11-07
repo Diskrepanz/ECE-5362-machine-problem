@@ -1,0 +1,108 @@
+*** Double operand MOV ***
+ st=150   rt='[pc]+1 -> q'		rac=1 rn=3 ib p1 oadder	
+ st=151   rt='[q] -> pc'			oq wac=1 wn=3    
+ 	cond='ir118' value=0 nst=160									*** reg ***
+	cond='ir118' value=1 nst=100									*** reg ind ***
+	cond='ir118' value=2 nst=110                                    *** autoin ***
+	cond='ir118' value=3 nst=100									*** autode ***
+	cond='ir118' value=4 nst=110									*** index ***
+	cond='ir118' value=5 nst=120									*** absl ***
+	cond='ir118' value=6 nst=130									*** imdi ***
+
+*** Register ***
+ st=160  rt='[R] -> t2'      	rac=2 it2
+ 	cond='ir64' value=0 nst=170  									*** reg ***
+ 	cond='ir64' value=1 nst=173  									*** reg ind ***
+	cond='ir64' value=2 nst=173 									*** autoin ***
+	cond='ir64' value=3 nst=171 									*** autode ***
+	cond='ir65' value=1 nst=181  									*** index&absl ***
+
+*** MOV to reg ***
+ st=170  rt='[t2] -> R'			ot2 wac=3 newz newn clrc clrv
+ 	nst=0
+
+*** MOV to reg ind&autoin&autode ***
+ st=171  rt='[R]-1 -> q'		rac=3 ib p1 oadder newv newc
+ st=172  rt='[q] -> R'			oq wac=3 newz newn
+ st=173  rt='[R] -> mar'      	rac=3 imar
+ st=174  rt='[[mar]] -> mdr'	read
+ st=175  rt='[mdr] -> t1'		mdr it1
+ st=176  rt='[t1] -> mar'		ot1 imar
+ st=177  rt='[t2] -> mdr'		ot2 imdr newz newn clrc clrv
+ st=178  rt='[mdr] -> memory'	write
+ 	cond='ir64' value=2 nst=179 									*** autoin ***
+ 	nst=0
+ st=179  rt='[R]+1 -> q'         rac=3 ib p1 oadder newv newc
+ st=180  rt='[q] -> R'           oq wac=3 newz newn
+    nst=0
+
+*** MOV to index&absl ***
+ st=181  rt='[q] -> mar'		imar oq
+ st=182  rt='[[mar]] -> mdr'		read
+ st=183  rt='[mdr] -> t1'		omdr it1
+ st=184  rt='[pc] + 1 -> q'		rac=1 rn=3 ib p1 oadder
+ st=185  rt='[q] -> pc'			oq wac=1 wn=3   
+	cond='ir64' value=5 nst=188										*** absl ***
+	nst=186
+ st=186  rt='[R] + [t1] -> q'	rac=3 oa ib oadder newz newn
+ st=187  rt='[q] -> t1'	        oq it1
+ st=188  rt='[t1] -> mar'		ot1 imar
+ st=189  rt='[t2] -> mdr'		ot2 imdr newz newn clrc clrv
+ st=190  rt='[mdr] -> memory'		write
+	nst=0
+
+*** Register indirect ***
+ st=200  rt='[R] -> mar'      	rac=2 imar
+ st=201  rt='[[mar]] -> mdr'	read
+ st=202  rt='[mdr] -> t2'		mdr it2
+ 	cond='ir64' value=0 nst=170  									*** reg ***
+ 	cond='ir64' value=1 nst=173  									*** reg ind ***
+	cond='ir64' value=2 nst=173 									*** autoin ***
+	cond='ir64' value=3 nst=171 									*** autode ***
+	cond='ir65' value=1 nst=181  									*** index&absl ***
+
+*** Autoincrement ***
+ st=210  rt='[R] -> mar'      	rac=2 imar
+ st=211  rt='[[mar]] -> mdr'	read
+ st=212  rt='[mdr] -> t2'		mdr it2
+ st=213  rt='[R]+1 -> q'		rac=2 ib p1 oadder newv newc
+ st=214  rt='[q] -> R'			oq wac=2 newz newn
+ 	cond='ir64' value=0 nst=170  									*** reg ***
+ 	cond='ir64' value=1 nst=173  									*** reg ind ***
+	cond='ir64' value=2 nst=173 									*** autoin ***
+	cond='ir64' value=3 nst=171 									*** autode ***
+	cond='ir65' value=1 nst=181  									*** index&absl ***
+
+*** Autodecrement ***
+ st=220  rt='[R] -> t1'      	rac=2 it1
+ st=221  rt='[t1] - 1 -> q'		oa comp oadder newv newc
+ st=222  rt='[q] -> R'			oq wac=2 newz newn
+ st=223  rt='[R] -> mar'      	rac=2 imar
+ st=224  rt='[[mar]] -> mdr'	read
+ st=225  rt='[mdr] -> t2'		mdr it2
+ 	cond='ir64' value=0 nst=170  									*** reg ***
+ 	cond='ir64' value=1 nst=173  									*** reg ind ***
+	cond='ir64' value=2 nst=173 									*** autoin ***
+	cond='ir64' value=3 nst=171 									*** autode ***
+	cond='ir65' value=1 nst=181  									*** index&absl ***
+
+*** Index & Absolute ***
+ st=230  rt='[q] -> mar'      	imar oq
+ st=231  rt='[[mar]] -> mdr'	read
+ st=232  rt='[mdr] -> t1'      	omdr it1
+ st=233  rt='[pc] + 1 -> q'		rac=1 rn=3 ib p1 oadder
+ st=234  rt='[q] -> pc'			oq wac=1 wn=3  
+ 	cond='ir64' value=5 nst=237
+ 	nst=235
+ st=235  rt='[R] + [t1] -> q'	rac=2 oa ib oadder newz newn
+ st=236  rt='[q] -> t1'	        oq it1
+ st=237  rt='[t1] -> mar'		ot1 imar
+	nst=201
+
+*** Immediate ***
+ st=240  rt='[q] -> t2'      	 oq it2
+ 	cond='ir64' value=0 nst=170  									*** reg ***
+ 	cond='ir64' value=1 nst=173  									*** reg ind ***
+	cond='ir64' value=2 nst=173 									*** autoin ***
+	cond='ir64' value=3 nst=171 									*** autode ***
+	cond='ir65' value=1 nst=181  									*** index&absl ***
