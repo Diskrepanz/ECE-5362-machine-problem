@@ -19,36 +19,40 @@
 	cond='ir64' value=2 nst=20									*** Autoincrement ***
 	cond='ir64' value=3 nst=30									*** Autodecrement ***
 	cond='ir65' value=2 nst=40									*** Index & Absolute ***
-	cond='ir158' value=2 nst=50     							*** Register INC ***
-	cond='ir158' value=3 nst=52     							*** Register DEC ***
-	cond='ir118' value=4 nst=60									*** NEG *** 
+	cond='ir118' value=2 nst=50     							*** Register INC ***
+	cond='ir118' value=3 nst=52     							*** Register DEC ***
+	cond='ir118' value=4 nst=55									*** Register NEG *** 
 	nst=10
 
 *** If any instructions are present except HALT or INC, a halt will occur.  ***
 *** HALT execution cycle ***
  st=10  halt
 
-*** INC&DEC Register indirect execution cycle ***
+*** INC&DEC&NEG Register indirect execution cycle ***
  st=20  rt='[R] -> mar'      	rac=3 imar
  st=21  rt='[[mar]] -> mdr'		read
+ 	cond='ir118' value=4 nst=25 								****NEG****
+ 	nst=22
  st=22  rt='[mdr] -> t1'		mdr it1
  	cond='ir118' value=2 nst=23 								****INC****
  	cond='ir118' value=3 nst=24									****DEC****
  st=23  rt='[t1] + 1 -> q'		oa p1 oadder newv newc
- 	nst=25
+ 	nst=26
  st=24  rt='[t1] - 1 -> q'		oa comp oadder newv newc
- st=25  rt='[q] -> mdr'			oq imdr newz newn
- st=26  rt='[mdr] -> memory'	write
+ 	nst=26
+ st=25  rt='0 - [mdr] -> q'		mdr ib oadder newv newc
+ st=26  rt='[q] -> mdr'			oq imdr newz newn
+ st=27  rt='[mdr] -> memory'	write
 	cond='ir64' value=2 nst=50
 	nst=0
 
-*** INC&DEC Autoincrement or Autodecrement execution cycle ***
+*** INC&DEC&NEG Autoincrement or Autodecrement execution cycle ***
  st=30  rt='[R] -> t1'      	rac=3 it1
  st=31  rt='[t1] - 1 -> q'		oa comp oadder newv newc
  st=32  rt='[q] -> R'			oq wac=3 newz newn
-	cond='ir64' value=3 nst=20
+	nst=20
 
-*** INC&DEC Index or Absolute execution cycle *** 
+*** INC&DEC&NEG Index or Absolute execution cycle *** 
  st=40  rt='[q] -> mar'      	imar oq
  st=41  rt='[[mar]] -> mdr'		read
  st=42  rt='[mdr] -> t1'      	omdr it1
@@ -61,7 +65,7 @@
  st=47  rt='[t1] -> mar'		ot1 imar
 	nst=21
 
-*** INC&DEC AC X SP PF execution cycle ***
+*** INC&DEC&NEG AC X SP PF execution cycle ***
  st=50  rt='[R]+1 -> q'         rac=3 ib p1 oadder newv newc
  st=51  rt='[q] -> R'           oq wac=3 newz newn
     nst=0
@@ -69,15 +73,8 @@
  st=53  rt='[t1] - 1 -> q'      oa comp oadder newv newc
  st=54  rt='[q] -> R'           oq wac=3 newz newn
  	nst=0
-
-
-
-
-
-
-
-
-
-
+ st=55  rt='0 - [R] -> q'       rac=3 ib oadder newv newc
+ st=56  rt='[q] -> R'           oq wac=3 newz newn
+ 	nst=0
 
 
