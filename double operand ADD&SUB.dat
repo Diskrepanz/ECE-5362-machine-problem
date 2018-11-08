@@ -23,6 +23,7 @@
  st=71  rt='[R] -> t1'			rac=3 t1					
  st=72  rt='[t2] -> ib'			ot2 ib
  	cond='ir1512' value=2 nst=74									*** SUB ***	                
+ 	nst=73
  st=73  rt='[t1] + [ib] -> q'	oa ib oadder newv newc
  	nst=75
  st=74  rt='[t1] - [ib] -> q'	oa ib comp p1 oadder newv newc
@@ -38,6 +39,7 @@
  st=81  rt='[mdr] -> t1'		mdr it1
  st=82  rt='[t2] -> ib'			ot2 ib
  	cond='ir1512' value=2 nst=84									*** SUB ***
+ 	nst=83
  st=83  rt='[t1] + [ib] -> q'	oa ib oadder newv newc
  	nst=85
  st=84  rt='[t1] - [ib] -> q'	oa ib comp p1 oadder newv newc
