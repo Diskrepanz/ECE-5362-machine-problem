@@ -33,17 +33,20 @@
  st=21  rt='[[mar]] -> mdr'		read
  	cond='ir118' value=4 nst=25 								****NEG****
  	nst=22
- st=22  rt='[mdr] -> t1'		mdr it1
+ st=22  rt='[mdr] -> t1'		omdr it1
  	cond='ir118' value=2 nst=23 								****INC****
  	cond='ir118' value=3 nst=24									****DEC****
  st=23  rt='[t1] + 1 -> q'		oa p1 oadder newv newc
  	nst=26
  st=24  rt='[t1] - 1 -> q'		oa comp oadder newv newc
  	nst=26
- st=25  rt='0 - [mdr] -> q'		mdr ib oadder newv newc
+ st=25  rt='0 - [mdr] -> q'		omdr ib oadder newv newc
  st=26  rt='[q] -> mdr'			oq imdr newz newn
- st=27  rt='[mdr] -> memory'	write
-	cond='ir64' value=2 nst=50
+	cond='ir65' value=2 nst=28
+	nst=27
+ st=27  rt='[R] -> mar'      	rac=3 imar
+ st=28  rt='[mdr] -> memory'	write
+	cond='ir65' value=2 nst=50
 	nst=0
 
 *** INC&DEC&NEG Autoincrement or Autodecrement execution cycle ***
