@@ -9,13 +9,13 @@
  st=1   rt='[[mar]] -> mdr'		read
  st=2   rt='[mdr] -> ir'		omdr iir
  	cond='ir1512' value=1 nst=60                                
- *** ADD ***
+*** ADD ***
  	cond='ir1512' value=2 nst=60								
- *** SUB ***
+*** SUB ***
  	cond='ir1512' value=3 nst=150								
- *** MOV ***	
+*** MOV ***	
  	cond='ir1512' value=0 nst=3 								
- *** SINGLE OPERAND ***
+*** SINGLE OPERAND ***
  st=3   rt='[pc]+1 -> q'		rac=1 rn=3 ib p1 oadder	
  st=4   rt='[q] -> pc'			oq wac=1 wn=3     
 	cond='ir158' value=0 nst=10									
@@ -44,17 +44,17 @@
  st=20  rt='[R] -> mar'      	rac=3 imar
  st=21  rt='[[mar]] -> mdr'		read
  	cond='ir118' value=4 nst=25 								
- ****NEG****
+****NEG****
  	nst=22
  st=22  rt='[mdr] -> t1'		omdr it1
  	cond='ir118' value=2 nst=23 								
- ****INC****
+****INC****
  	cond='ir118' value=3 nst=24									
- ****DEC****
+****DEC****
  st=23  rt='[t1] + 1 -> q'		oa p1 oadder newv newc
  	nst=26
  st=24  rt='[t1] - 1 -> q'		oa comp oadder newv newc
- 	nst=26
+ 	nst=	
  st=25  rt='0 - [mdr] -> q'		omdr ib comp p1 oadder newv newc
  st=26  rt='[q] -> mdr'			oq imdr newz newn
 	cond='ir65' value=2 nst=28
