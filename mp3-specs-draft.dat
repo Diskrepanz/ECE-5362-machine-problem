@@ -54,7 +54,7 @@
  st=23  rt='[t1] + 1 -> q'		oa p1 oadder newv newc
  	nst=26
  st=24  rt='[t1] - 1 -> q'		oa comp oadder newv newc
- 	nst=	
+ 	nst=26	
  st=25  rt='0 - [mdr] -> q'		omdr ib comp p1 oadder newv newc
  st=26  rt='[q] -> mdr'			oq imdr newz newn
 	cond='ir65' value=2 nst=28
