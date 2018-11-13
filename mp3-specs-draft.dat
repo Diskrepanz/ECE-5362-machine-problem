@@ -8,20 +8,32 @@
  st=0   rt='[pc] -> mar'		imar rac=1 rn=3
  st=1   rt='[[mar]] -> mdr'		read
  st=2   rt='[mdr] -> ir'		omdr iir
- 	cond='ir1512' value=1 nst=60                                *** ADD ***
- 	cond='ir1512' value=2 nst=60								*** SUB ***
- 	cond='ir1512' value=3 nst=150								*** MOV ***	
- 	cond='ir1512' value=0 nst=3 								*** SINGLE OPERAND ***
+ 	cond='ir1512' value=1 nst=60                                
+ *** ADD ***
+ 	cond='ir1512' value=2 nst=60								
+ *** SUB ***
+ 	cond='ir1512' value=3 nst=150								
+ *** MOV ***	
+ 	cond='ir1512' value=0 nst=3 								
+ *** SINGLE OPERAND ***
  st=3   rt='[pc]+1 -> q'		rac=1 rn=3 ib p1 oadder	
  st=4   rt='[q] -> pc'			oq wac=1 wn=3     
-	cond='ir158' value=0 nst=10									*** HALT ***
-	cond='ir64' value=1 nst=20									*** Register indirect ***	
-	cond='ir64' value=2 nst=20									*** Autoincrement ***
-	cond='ir64' value=3 nst=30									*** Autodecrement ***
-	cond='ir65' value=2 nst=40									*** Index & Absolute ***
-	cond='ir118' value=2 nst=50     							*** Register INC ***
-	cond='ir118' value=3 nst=52     							*** Register DEC ***
-	cond='ir118' value=4 nst=55									*** Register NEG *** 
+	cond='ir158' value=0 nst=10									
+*** HALT ***
+	cond='ir64' value=1 nst=20									
+*** Register indirect ***	
+	cond='ir64' value=2 nst=20									
+*** Autoincrement ***
+	cond='ir64' value=3 nst=30									
+*** Autodecrement ***
+	cond='ir65' value=2 nst=40									
+*** Index & Absolute ***
+	cond='ir118' value=2 nst=50     						
+*** Register INC ***
+	cond='ir118' value=3 nst=52     							
+*** Register DEC ***
+	cond='ir118' value=4 nst=55									
+*** Register NEG *** 
 	nst=10
 
 *** If any instructions are present except HALT or INC, a halt will occur.  ***
@@ -31,16 +43,19 @@
 *** INC&DEC&NEG Register indirect execution cycle ***
  st=20  rt='[R] -> mar'      	rac=3 imar
  st=21  rt='[[mar]] -> mdr'		read
- 	cond='ir118' value=4 nst=25 								****NEG****
+ 	cond='ir118' value=4 nst=25 								
+ ****NEG****
  	nst=22
  st=22  rt='[mdr] -> t1'		omdr it1
- 	cond='ir118' value=2 nst=23 								****INC****
- 	cond='ir118' value=3 nst=24									****DEC****
+ 	cond='ir118' value=2 nst=23 								
+ ****INC****
+ 	cond='ir118' value=3 nst=24									
+ ****DEC****
  st=23  rt='[t1] + 1 -> q'		oa p1 oadder newv newc
  	nst=26
  st=24  rt='[t1] - 1 -> q'		oa comp oadder newv newc
  	nst=26
- st=25  rt='0 - [mdr] -> q'		omdr ib oadder newv newc
+ st=25  rt='0 - [mdr] -> q'		omdr ib comp p1 oadder newv newc
  st=26  rt='[q] -> mdr'			oq imdr newz newn
 	cond='ir65' value=2 nst=28
 	nst=27
@@ -76,7 +91,7 @@
  st=53  rt='[t1] - 1 -> q'      oa comp oadder newv newc
  st=54  rt='[q] -> R'           oq wac=3 newz newn
  	nst=0
- st=55  rt='0 - [R] -> q'       rac=3 ib oadder newv newc
+ st=55  rt='0 - [R] -> q'       rac=3 ib comp p1 oadder newv newc
  st=56  rt='[q] -> R'           oq wac=3 newz newn
  	nst=0
 
