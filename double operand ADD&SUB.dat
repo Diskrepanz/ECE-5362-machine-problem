@@ -1,4 +1,4 @@
-*** Double operand ADD&SUB***
+l*** Double operand ADD&SUB***
  st=60   rt='[pc]+1 -> q'		rac=1 rn=3 ib p1 oadder	
  st=61   rt='[q] -> pc'			oq wac=1 wn=3    
  	cond='ir118' value=0 nst=70										*** reg ***
