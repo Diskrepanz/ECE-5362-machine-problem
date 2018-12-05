@@ -55,10 +55,13 @@
 *** If any instructions are present except HALT or INC, a halt will occur.  ***
 *** SPECIAL execution cycle ***
  st=5   rt='[q] -> pc'			oq wac=1 wn=3
-	cond='ir75' value=1 nst=6
-*** SC/CC ***		
 	cond='ir74' value=0 nst=17
 *** HALT ***		
+	cond='ir75' value=1 nst=6
+*** SC/CC ***
+	cond='ir76' value=2 nst=?????
+*** BRANCH&RTS ***
+	nst=17			
  st=6  
  	cond='ir4' value=1 nst=7
  	cond='ir4' value=0 nst=8
@@ -207,3 +210,41 @@
  st=95  rt='[t1] + [t2] -> q'	oa ot2 ib oadder
  st=96  rt='[q] -> pc'			oq wac=1 wn=3	
  	nst=0
+
+st=500
+	cond='ir64' value=0	nst=501
+	cond='ir64' value=1	nst=502
+	cond='ir64' value=3	nst=509
+st=501
+	cond='ir1' value=1  nst=508
+	cond='ir0' value=1	nst=508
+	nst=503
+st=502 
+	cond='ir3' value=1	nst=508
+	cond='ir1' value=1  nst=508
+	nst=508
+st=503  rt='[sp] -> mar'		rac=1 rn=2 imar
+st=504	rt='[mar] -> mdr'		read
+st=505	rt='[mdr] -> pc'		omdr wac=1 wn=3
+st=506  rt='[sp]+1 -> q'		rac=1 rn=2 ib p1 oadder 
+st=507  rt='[q] -> sp'			oq wac=1 wn=2
+	nst=0
+st=508
+	cond='ibrch' value=1  nst=510
+	nst=0
+st=509
+	cond='ibrch' value=0  nst=510
+	nst=0
+st=510	rt='[pc] -> mar'		imar rac=1 rn=3	
+st=511	rt='[[mar]] -> mdr'		read
+st=512  rt='[pc]+1 -> q'		rac=1 rn=3 ib p1 oadder
+st=513  rt='[q] -> pc_upd'		oq wac=1 wn=3 
+st=514  rt='[pc_upd] -> t1'		rac=1 rn=3 it1
+st=515	rt='[t1] + mdr -> q'	rac=1 rn=3 omdr ib oadder		
+st=516  rt='[q] -> pc'			oq wac=1 wn=3 
+	nst=0
+
+
+
+
+
