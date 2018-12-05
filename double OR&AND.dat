@@ -1,0 +1,166 @@
+*** Double operand OR&AND ***
+ st=250   rt='[q] -> pc'		oq wac=1 wn=3    
+ 	cond='ir118' value=0 nst=260									
+*** reg ***
+	cond='ir118' value=1 nst=301									
+*** reg ind ***
+	cond='ir118' value=2 nst=310                                    
+*** autoin ***
+	cond='ir118' value=3 nst=320									
+*** autode ***
+	cond='ir118' value=4 nst=330									
+*** index ***
+	cond='ir118' value=5 nst=330									
+*** absl ***
+	cond='ir118' value=6 nst=340									
+*** imdi ***
+
+*** Register ***
+ st=260  rt='[R] -> t2'      	rac=2 it2
+ 	cond='ir64' value=0 nst=270  									
+*** reg ***
+ 	cond='ir64' value=1 nst=283  									
+*** reg ind ***
+	cond='ir64' value=2 nst=283 									
+*** autoin ***
+	cond='ir64' value=3 nst=280 									
+*** autode ***
+	cond='ir65' value=2 nst=300  									
+*** index&absl ***
+
+*** OR&AND with reg ***
+ st=270  rt='[R] -> t1'      		rac=3 it1
+ 	cond='ir1512' value=5 nst=272		
+*** OR ***		
+ st=271  rt='[t1] or [t2] -> q'		ot1 ot2 ib oadder	
+ 	nst=277
+ st=272  rt='~[t1] -> q'			ot1 ib comp oadder 
+ st=273  rt='[q] -> t1'				oq it1
+ st=274  rt='~[t2] -> q'			ot2 ib comp oadder 
+ st=275  rt='[q] -> t2'				oq it2
+ st=276  rt='~([t1] or [t2]) -> q'	ot1 ot2 ib comp oadder
+ st=277  rt='[q] -> R'				oq wac=3
+ 	nst=0
+	
+*** OR&AND with reg ind&autoin&autode ***
+ st=280  rt='[R] -> t1'      		rac=3 it1
+ st=281  rt='[t1] - 1 -> q'			oa comp oadder 
+ st=282  rt='[q] -> R'				oq wac=3 
+ st=283  rt='[R] -> mar'      		rac=3 imar
+
+ st=284  rt='[[mar]] -> mdr'		 	read
+ st=285  rt='[mdr] -> t1'			omdr it1
+ 	cond='ir1512' value=5 nst=287		
+*** OR ***	
+ st=286  rt='[t1] or [t2] -> q'		ot1 ot2 ib oadder
+ 	nst=292
+ st=287  rt='~[t1] -> q'			ot1 ib comp oadder 
+ st=288  rt='[q] -> t1'				oq it1
+ st=289  rt='~[t2] -> q'			ot2 ib comp oadder 
+ st=290  rt='[q] -> t2'				oq it2
+ st=291  rt='~([t1] or [t2]) -> q'	ot1 ot2 ib comp oadder
+ st=292  rt='[q] -> mdr'			oq imdr 
+ st=293  rt='[mdr] -> memory'		write
+ 	cond='ir64' value=2 nst=289 									
+*** autoin ***
+ 	nst=0
+ st=294  rt='[R] + 1 -> q'         	rac=3 ib p1 oadder 
+ st=295  rt='[q] -> R'           	oq wac=3 
+    nst=0
+
+*** OR&AND with index&absl ***
+ st=300  rt='[q] -> mar'			imar oq
+ st=301  rt='[[mar]] -> mdr'		read
+ st=302  rt='[mdr] -> t1'			omdr it1
+ st=303  rt='[pc] + 1 -> q'			rac=1 rn=3 ib p1 oadder
+ st=304  rt='[q] -> pc'				zoq wac=1 wn=3   
+	cond='ir64' value=5 nst=307										
+*** absl ***
+	nst=305
+ st=305  rt='[R] + [t1] -> q'		rac=3 oa ib oadder
+ st=306  rt='[q] -> t1'	        	oq it1
+ st=307  rt='[t1] -> mar'		ot1 imar
+ 	nst=284
+
+*** Register indirect ***
+ st=301  rt='[R] -> mar'      		rac=2 imar
+ st=302  rt='[[mar]] -> mdr'		read
+ st=303  rt='[mdr] -> t2'		omdr it2
+ 	cond='ir64' value=0 nst=270  									
+*** reg ***
+ 	cond='ir64' value=1 nst=283  									
+*** reg ind ***
+	cond='ir64' value=2 nst=283 									
+*** autoin ***
+	cond='ir64' value=3 nst=280 									
+*** autode ***
+	cond='ir65' value=2 nst=300  									
+*** index&absl ***
+
+*** Autoincrement ***
+ st=310  rt='[R] -> mar'      		rac=2 imar
+ st=311  rt='[[mar]] -> mdr'		read
+ st=312  rt='[mdr] -> t2'		omdr it2
+ st=313  rt='[R]+1 -> q'		rac=2 ib p1 oadder 
+ st=314  rt='[q] -> R'			oq wac=2 
+ 	cond='ir64' value=0 nst=270  									
+*** reg ***
+ 	cond='ir64' value=1 nst=283  									
+*** reg ind ***
+	cond='ir64' value=2 nst=283 									
+*** autoin ***
+	cond='ir64' value=3 nst=280 									
+*** autode ***
+	cond='ir65' value=2 nst=300  									
+*** index&absl ***
+
+*** Autodecrement ***
+ st=320  rt='[R] -> t1'      		rac=2 it1
+ st=321  rt='[t1] - 1 -> q'		oa comp oadder 
+ st=322  rt='[q] -> R'			oq wac=2 
+ st=323  rt='[R] -> mar'      		rac=2 imar
+ st=324  rt='[[mar]] -> mdr'		read
+ st=325  rt='[mdr] -> t2'		omdr it2
+ 	cond='ir64' value=0 nst=270  									
+*** reg ***
+ 	cond='ir64' value=1 nst=283  									
+*** reg ind ***
+	cond='ir64' value=2 nst=283 									
+*** autoin ***
+	cond='ir64' value=3 nst=280 									
+*** autode ***
+	cond='ir65' value=2 nst=300  									
+*** index&absl ***
+
+*** Index & Absolute ***
+ st=330  rt='[q] -> mar'      		imar oq
+ st=331  rt='[[mar]] -> mdr'		read
+ st=332  rt='[mdr] -> t1'      		omdr it1
+ st=333  rt='[pc] + 1 -> q'		rac=1 rn=3 ib p1 oadder
+ st=334  rt='[q] -> pc'			oq wac=1 wn=3  
+ 	cond='ir118' value=5 nst=337
+ 	nst=335
+ st=335  rt='[R] + [t1] -> q'		rac=2 oa ib oadder
+ st=336  rt='[q] -> t1'	        	oq it1
+ st=337  rt='[t1] -> mar'		ot1 imar
+	cond='ir65' value=2 nst=338
+	nst=302
+ st=338  rt='[pc] -> q'			rac=1 rn=3 ib oadder 
+	nst=302
+
+*** Immediate ***
+ st=340  rt='[q] -> mar'      		imar oq
+ st=341  rt='[[mar]] -> mdr'		read
+ st=342  rt='[mdr] -> t2'      		omdr it2
+ st=343  rt='[pc] + 1 -> q'		rac=1 rn=3 ib p1 oadder
+ st=344  rt='[q] -> pc'			oq wac=1 wn=3  
+ 	cond='ir64' value=0 nst=270  									
+*** reg ***
+ 	cond='ir64' value=1 nst=283  									
+*** reg ind ***
+	cond='ir64' value=2 nst=283 									
+*** autoin ***
+	cond='ir64' value=3 nst=280 									
+*** autode ***
+	cond='ir65' value=2 nst=300  									
+*** index&absl ***

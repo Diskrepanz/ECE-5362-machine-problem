@@ -1,0 +1,209 @@
+*****************************
+***   ECE 5362, Au 2018   ***
+***   Machine Problem 3   ***
+*******  Sheng Ding  ********
+*******  Allen Yang  ********
+*****************************
+***   Start fetch cycle   ***
+ st=0   rt='[pc] -> mar'		imar rac=1 rn=3
+ st=1   rt='[[mar]] -> mdr'		read
+ st=2   rt='[mdr] -> ir'		omdr iir						
+ st=3   rt='[pc]+1 -> q'		rac=1 rn=3 ib p1 oadder
+	cond='ir158' value=0 nst=5
+*** SPECIAL&CONDITIONAL BRANCH ***		
+	cond='ir1512' value=1 nst=?   
+*** ADD ***		                             
+ 	cond='ir1512' value=2 nst=?		
+*** SUB ***							
+ 	cond='ir1512' value=3 nst=?	
+*** MOVE ***	
+ 	cond='ir1512' value=4 nst=?
+*** EXG ***	
+ 	cond='ir1512' value=5 nst=?
+*** OR ***
+ 	cond='ir1512' value=6 nst=?
+*** AND ***
+ 	cond='ir1512' value=0 nst=4 
+*** SINGLE&DBRA ***					
+ st=4   rt='[q] -> pc'			oq wac=1 wn=3							
+	cond='ir64' value=1 nst=20
+*** Register Indirect ***										
+	cond='ir64' value=2 nst=20
+*** Autoincre ***									
+	cond='ir64' value=3 nst=50
+*** Autode ***									
+	cond='ir65' value=2 nst=60
+*** Index&Absolute ***			
+	cond='ir118' value=1 nst=70 
+*** Register CLR ***							
+	cond='ir118' value=2 nst=72 
+*** Register INC ***							
+	cond='ir118' value=3 nst=74 
+*** Register DEC *** 							
+	cond='ir118' value=4 nst=76
+*** Register NEG ***				
+	cond='ir118' value=5 nst=77
+*** Register COMP ***				
+	cond='ir109' value=3 nst=78
+*** Register JMP&JSR ***		
+	cond='ir118' value=8 nst=85
+*** Register TST ***
+	cond='ir118' value=10 nst=86
+*** DBRA ***									 
+	nst=17
+
+*** If any instructions are present except HALT or INC, a halt will occur.  ***
+*** SPECIAL execution cycle ***
+ st=5   rt='[q] -> pc'			oq wac=1 wn=3
+	cond='ir75' value=1 nst=6
+*** SC/CC ***		
+	cond='ir74' value=0 nst=17
+*** HALT ***		
+ st=6  
+ 	cond='ir4' value=1 nst=7
+ 	cond='ir4' value=0 nst=8
+ st=7  	
+ 	cond='ir0' value=1 nst=9
+ 	cond='ir1' value=1 nst=10
+ 	cond='ir2' value=1 nst=11
+ 	cond='ir3' value=1 nst=12
+ 	nst
+ st=8	
+ 	cond='ir0' value=1 nst=13
+ 	cond='ir1' value=1 nst=14
+ 	cond='ir2' value=1 nst=15
+ 	cond='ir3' value=1 nst=16		
+ st=9	rt='1-> c'		setc 
+ st=10	rt='1-> v'		setv 
+ st=11	rt='1-> z'		setz
+ st=12	rt='1-> n'		setn
+ 	nst=0
+ st=13	rt='0-> c'		clrc 
+ st=14	rt='0-> v'		clrv 
+ st=15	rt='0-> z'		clrz
+ st=16	rt='0-> z'		clrn
+ 	nst=0
+ st=17 halt
+
+*** CLR&INC&DEC&NEG&COMP&JMP&JSR&TST Register indirect execution cycle ***
+ st=20  rt='[R] -> mar'      		rac=3 imar
+ 	cond='ir118' value=1 nst=21
+*** CLR ***	
+	nst=22
+ st=21  rt='0 -> q'             oadder clrc clrv 
+ 	nst=37
+ st=22  rt='[[mar]] -> mdr'		read
+ 	cond='ir118' value=4 nst=26 
+ 	cond='ir118' value=5 nst=27 
+	cond='ir118' value=6 nst=28 
+	cond='ir118' value=7 nst=29	
+ 	nst=23
+ st=23  rt='[mdr] -> t1'		omdr it1
+ 	cond='ir118' value=2 nst=24 								
+ 	cond='ir118' value=3 nst=25	
+	cond='ir118' value=8 nst=35		
+	cond='ir118' value=10 nst=36	
+ st=24  rt='[t1] + 1 -> q'		oa p1 oadder newv newc
+ 	nst=37
+ st=25  rt='[t1] - 1 -> q'		oa comp oadder newv newc
+ 	nst=37
+ st=26  rt='0 - [mdr] -> q'		omdr ib comp p1 oadder newv newc
+ 	nst=37
+ st=27  rt='~[mdr] -> q'		omdr ib comp oadder newv newc
+ 	nst=37
+ st=28  rt='[mdr] -> pc'		omdr wac=1 wn=3
+ 	nst=37 
+ st=29  rt='[mdr] -> pc'		omdr wac=1 wn=3
+ st=30  rt='[sp] -> t1'      	rac=1 rn=2 it1
+ st=31  rt='[t1] - 1 -> q'      oa comp oadder
+ st=32  rt='[q] -> sp'          oq wac=1 wn=2
+ st=33  rt='[sp] -> mar'        rac=1 rn=2 imar
+ st=34  rt='[pc_upd] -> mdr'    rac=1 rn=3 imdr
+ 	nst=38
+ st=35  rt='[t1] - 0  -> q'	    ot1 oadder clrc clrv newz newn 
+	nst=0
+ st=36  rt='[t1] - 1 -> q'		oa comp oadder newv newc
+ st=37  rt='[q] -> mdr'			oq imdr newz newn
+ st=38  rt='[mdr] -> memory'	write
+	cond='ir64' value=2 nst=39
+	cond='ir118' value=10 nst=41
+	nst=0
+ st=39  rt='[R]+1 -> q'         rac=3 ib p1 oadder
+ st=40  rt='[q] -> R'           oq wac=3 
+	cond='ir118' value=10 nst=41
+    nst=0
+ st=41  rt='[mdr] -> it1'		rac=3 ib p1 oadder
+ st=42  rt='[t1] + 1 -> q'		oa p1 oadder 
+ 	cond='busz' value=1	nst=80
+  	cond='busz' value=0	nst=0	
+ st=43  rt='[pc] -> mar'		imar rac=1 rn=3
+ st=44  rt='[[mar]] -> mdr'		read
+ st=45  rt='[mdr] -> t2 '		omdr iir			
+ st=46  rt='[pc] + 1 -> q'		rac=1 rn=3 ib p1 oadder
+ st=47  rt='[q] -> t1'			oq it1
+ st=48  rt='[t1] + [t2] -> q'	oa ot2 ib oadder
+ st=49  rt='[q] -> pc'			oq wac=1 wn=3	
+ 	nst=0
+
+*** CLR&INC&DEC&NEG&COMP&JMP&JSR&TST Autoincrement or Autodecrement execution cycle ***
+ st=50  rt='[R] -> t1'      	rac=3 it1
+ st=51  rt='[t1] - 1 -> q'		oa comp oadder
+ st=52  rt='[q] -> R'			oq wac=3 
+	nst=20
+
+*** CLR&INC&DEC&NEG&COMP&JMP&JSR&TST Index or Absolute execution cycle *** 
+ st=60  rt='[q] -> mar'      		imar oq
+ st=61  rt='[[mar]] -> mdr'		read
+ st=62  rt='[mdr] -> t1'      		omdr it1
+ st=63  rt='[pc] + 1 -> q'		rac=1 rn=3 ib p1 oadder
+ st=64  rt='[q] -> pc'			oq wac=1 wn=3   
+	cond='ir64' value=5 nst=67
+	nst=65
+ st=65  rt='[R] + [t1] -> q'		rac=3 oa ib oadder newv newc
+ st=66  rt='[q] -> t1'	        	oq it1 newz newn
+ st=67  rt='[t1] -> mar'		ot1 imar
+ 	cond='ir118' value=1 nst=21
+*** CLR ***	
+	nst=22
+
+*** CLR&INC&DEC&NEG&COMP&JMP&JSR&TST Register execution cycle ***
+ st=70  rt='0 -> q'             oadder clrc clrv 
+ st=71  rt='[q] -> R'           oq wac=3 setz clrn
+ 	nst=0
+ st=72  rt='[R]+1 -> q'         rac=3 ib p1 oadder newc newv 
+ st=73  rt='[q] -> R'           oq wac=3 newz newn
+    nst=0
+ st=74  rt='[R] -> t1'      	rac=3 it1
+ st=75  rt='[t1] - 1 -> q'      oa comp oadder newc newv 
+ 	nst=73
+ st=76  rt='0 - [R] -> q'       rac=3 ib comp p1 oadder newc newv
+ 	nst=73
+ st=77  rt='~[R] -> q'          rac=3 ib comp oadder setc setv
+ 	nst=73
+ st=78  rt='[R] -> pc'			rac=3 wac=1 wn=3
+	cond='ir118' value=7 nst=79
+*** JSR ***
+	nst=0     
+ st=79  rt='[sp] -> t1'      	rac=1 rn=2 it1
+ st=80  rt='[t1] - 1 -> q'      oa comp oadder
+ st=81  rt='[q] -> sp'          oq wac=1 wn=2
+ st=82  rt='[sp] -> mar'        rac=1 rn=2 imar
+ st=83  rt='[pc_upd] -> mdr'    rac=1 rn=3 imdr
+ st=84  rt='[mdr] -> memory'	write
+ 	nst=0     
+ st=85  rt='[R] - 0  -> q'		rac=3 oadder clrc clrv newz newn 
+	nst=0
+ st=86  rt='[R] -> t1'      	rac=3 it1
+ st=87  rt='[t1] - 1 -> q'      oa comp oadder 
+ st=88  rt='[q] -> R'      		oq wac=3
+ st=89  rt='[R] + 1 -> q'       rac=3 ib p1 oadder
+ 	cond='busz' value=1	nst=90
+  	cond='busz' value=0	nst=0	
+ st=90  rt='[pc] -> mar'		imar rac=1 rn=3
+ st=91  rt='[[mar]] -> mdr'		read
+ st=92  rt='[mdr] -> t2 '		omdr iir			
+ st=93  rt='[pc] + 1 -> q'		rac=1 rn=3 ib p1 oadder
+ st=94  rt='[q] -> t1'			oq it1
+ st=95  rt='[t1] + [t2] -> q'	oa ot2 ib oadder
+ st=96  rt='[q] -> pc'			oq wac=1 wn=3	
+ 	nst=0
