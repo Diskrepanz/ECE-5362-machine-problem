@@ -68,23 +68,26 @@
  st=7  	
  	cond='ir0' value=1 nst=9
  	cond='ir1' value=1 nst=10
- 	cond='ir2' value=1 nst=11
- 	cond='ir3' value=1 nst=12
+ 	cond='ir2' value=1 nst=13
+ 	cond='ir3' value=1 nst=14
  	nst
  st=8	
- 	cond='ir0' value=1 nst=13
- 	cond='ir1' value=1 nst=14
- 	cond='ir2' value=1 nst=15
- 	cond='ir3' value=1 nst=16		
+ 	cond='ir0' value=1 nst=11
+ 	cond='ir1' value=1 nst=12
+ 	cond='ir2' value=1 nst=14
+ 	cond='ir3' value=1 nst=13		
  st=9	rt='1-> c'		setc 
  st=10	rt='1-> v'		setv 
- st=11	rt='1-> z'		setz
- st=12	rt='1-> n'		setn
- 	nst=0
- st=13	rt='0-> c'		clrc 
- st=14	rt='0-> v'		clrv 
- st=15	rt='0-> z'		clrz
- st=16	rt='0-> z'		clrn
+ st=11	rt='0-> c'		clrc 
+ st=12	rt='0-> v'		clrv 
+ st=13  rt='0 -> q'             oadder
+	cond='ir2' value=1 nst=15
+ 	cond='ir3' value=1 nst=16	
+ st=14	rt='FFFF -> q'			comp oadder
+	cond='ir2' value=1 nst=15
+ 	cond='ir3' value=1 nst=16	
+ st=15  rt='q -> t4'			oq it4 newz
+ st=16	rt='q -> t4'			oq it4 newn
  	nst=0
  st=17 halt
 
@@ -94,7 +97,7 @@
 *** CLR ***	
 	nst=22
  st=20  rt='0 -> q'             oadder clrc clrv 
- st=21  rt='[q] -> mdr'			oq imdr setz clrn
+ st=21  rt='[q] -> mdr'			oq imdr newz newn
  	nst=0
  st=22  rt='[[mar]] -> mdr'		read
  	cond='ir118' value=4 nst=26 
@@ -172,7 +175,7 @@
 
 *** CLR&INC&DEC&NEG&COMP&JMP&JSR&TST Register execution cycle ***
  st=70  rt='0 -> q'             oadder clrc clrv 
- st=71  rt='[q] -> R'           oq wac=3 setz clrn
+ st=71  rt='[q] -> R'           oq wac=3 newz newn
  	nst=0
  st=72  rt='[R]+1 -> q'         rac=3 ib p1 oadder newc newv 
  st=73  rt='[q] -> R'           oq wac=3 newz newn
@@ -616,7 +619,7 @@
  st=331  rt='[[mar]] -> mdr'		read
  st=332  rt='[mdr] -> t1'			omdr it1
  st=333  rt='[pc] + 1 -> q'			rac=1 rn=3 ib p1 oadder
- st=334  rt='[q] -> pc'				zoq wac=1 wn=3   
+ st=334  rt='[q] -> pc'				oq wac=1 wn=3   
 	cond='ir64' value=5 nst=337										
 *** absl ***
 	nst=335
@@ -763,7 +766,7 @@
  st=431  rt='[[mar]] -> mdr'		read
  st=432  rt='[mdr] -> t1'			omdr it1
  st=433  rt='[pc] + 1 -> q'			rac=1 rn=3 ib p1 oadder
- st=434  rt='[q] -> pc'				zoq wac=1 wn=3   
+ st=434  rt='[q] -> pc'				oq wac=1 wn=3   
 	cond='ir64' value=5 nst=437										
 *** absl ***
 	nst=435
