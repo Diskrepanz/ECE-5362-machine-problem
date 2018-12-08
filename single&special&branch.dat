@@ -55,7 +55,7 @@
 *** If any instructions are present except HALT or INC, a halt will occur.  ***
 *** SPECIAL execution cycle ***
  st=5   rt='[q] -> pc'			oq wac=1 wn=3
-	cond='ir74' value=0 nst=17
+	cond='ir75' value=0 nst=17
 *** HALT ***		
 	cond='ir75' value=1 nst=6
 *** SC/CC ***
@@ -211,6 +211,9 @@
  st=96  rt='[q] -> pc'			oq wac=1 wn=3	
  	nst=0
 
+
+
+
 st=500
 	cond='ir64' value=0	nst=501
 	cond='ir64' value=1	nst=502
@@ -243,8 +246,3 @@ st=514  rt='[pc_upd] -> t1'		rac=1 rn=3 it1
 st=515	rt='[t1] + mdr -> q'	rac=1 rn=3 omdr ib oadder		
 st=516  rt='[q] -> pc'			oq wac=1 wn=3 
 	nst=0
-
-
-
-
-
